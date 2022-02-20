@@ -20,6 +20,7 @@ import PeopleIcon from './people.svg'
 import SearchIcon from './search.svg'
 import MoonIcon from './moon.svg'
 import SunIcon from './sun.svg'
+import StarIcon from './star.svg'
 import BellIcon from './bell.svg'
 import MenuIcon from './menu.svg'
 import DropdownIcon from './dropdown.svg'
@@ -50,6 +51,7 @@ export {
   SearchIcon,
   MoonIcon,
   SunIcon,
+  StarIcon,
   BellIcon,
   MenuIcon,
   DropdownIcon,
