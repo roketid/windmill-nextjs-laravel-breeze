@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from '@roketid/win
 import PageTitle from 'example/components/Typography/PageTitle'
 import CTA from 'example/components/CTA'
 import Layout from 'example/containers/Layout'
+import { StarIcon } from 'icons'
 
 function Modals() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -19,7 +20,7 @@ function Modals() {
   return (
     <Layout>
       <PageTitle>Modals</PageTitle>
-      <CTA />
+      <CTA icon={StarIcon} message='Star this project on GitHub' url='https://github.com/roketid/windmill-nextjs-laravel-breeze' />
 
       <div>
         <Button onClick={openModal}>Open modal</Button>

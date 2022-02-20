@@ -1,10 +1,29 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 
 import { Label, Input, Button, WindmillContext } from '@roketid/windmill-react-ui'
+import { useAuth } from 'hooks/auth'
+
+interface IEvent {
+  preventDefault: () => void
+}
 
 function ForgotPassword() {
+  const { forgotPassword } = useAuth({ middleware: 'guest' })
+
+  const [submitting, setSubmittingState] = useState(false)
+  const [email, setEmail] = useState('')
+  const [errors, setErrors] = useState([])
+  const [status, setStatus] = useState(null)
+
+  const submitForm = async (event: IEvent) => {
+    event.preventDefault()
+
+    setSubmittingState(true)
+    forgotPassword({ email, setErrors, setStatus })
+    setSubmittingState(false)
+  }
+
   const { mode } = useContext(WindmillContext)
   const imgSource = mode === 'dark' ? '/assets/img/forgot-password-office-dark.jpeg' : '/assets/img/forgot-password-office.jpeg'
 
@@ -22,22 +41,30 @@ function ForgotPassword() {
             />
           </div>
           <main className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-            <div className="w-full">
+            <form onSubmit={submitForm} className="w-full">
               <h1 className="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                 Forgot password
               </h1>
+              {
+                errors.length && !submitting
+                  ? <h6 className='mb-4 text-red-500 text-xs'>{errors[0]}</h6>
+                  : ``
+              }
+              {status && (
+                <div className="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+                  {status}
+                </div>
+              )}
 
               <Label>
                 <span>Email</span>
-                <Input className="mt-1" placeholder="Jane Doe" />
+                <Input className="mt-1" type="email" placeholder="your@email.com" required value={email} onChange={event => setEmail(event.target.value)} />
               </Label>
 
-            <Link href="/example" passHref={true}>
-              <Button tag={"button"} block className="mt-4">
+              <Button type='submit' block className="mt-4" disabled={submitting || (status !== null && errors.length === 0)}>
                 Recover password
               </Button>
-            </Link>
-            </div>
+            </form>
           </main>
         </div>
       </div>

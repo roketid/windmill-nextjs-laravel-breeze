@@ -16,7 +16,7 @@ import {
   Button,
   Pagination,
 } from '@roketid/windmill-react-ui'
-import { EditIcon, TrashIcon } from 'icons'
+import { EditIcon, StarIcon, TrashIcon } from 'icons'
 
 import response, { ITableData } from 'utils/demo/tableData'
 import Layout from 'example/containers/Layout'
@@ -70,7 +70,7 @@ function Tables() {
     <Layout>
       <PageTitle>Tables</PageTitle>
 
-      <CTA />
+      <CTA icon={StarIcon} message='Star this project on GitHub' url='https://github.com/roketid/windmill-nextjs-laravel-breeze' />
 
       <SectionTitle>Simple table</SectionTitle>
       <TableContainer className="mb-8">

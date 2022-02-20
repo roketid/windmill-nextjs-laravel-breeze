@@ -9,7 +9,7 @@ import PageTitle from 'example/components/Typography/PageTitle'
 import RoundIcon from 'example/components/RoundIcon'
 import Layout from 'example/containers/Layout'
 import response, { ITableData } from 'utils/demo/tableData'
-import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from 'icons'
+import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon, StarIcon } from 'icons'
 
 import {
   TableBody,
@@ -42,6 +42,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { useRouter } from 'next/router'
 
 function Dashboard() {
   Chart.register(
@@ -73,11 +74,25 @@ function Dashboard() {
     setData(response.slice((page - 1) * resultsPerPage, page * resultsPerPage))
   }, [page])
 
+  let ctaMessage = 'Star this project on GitHub' as string
+  let ctaUrl = 'https://github.com/roketid/windmill-nextjs-laravel-breeze' as string|undefined
+  let ctaIcon = StarIcon
+
+  const { query } = useRouter()
+
+  if (query.verified) {
+    ctaMessage = 'Welcome, your email has been verified'
+    ctaUrl = undefined
+  } else if (query.logged) {
+    ctaMessage = 'Welcome back'
+    ctaUrl = undefined
+  }
+
   return (
     <Layout>
       <PageTitle>Dashboard</PageTitle>
 
-      <CTA />
+      <CTA message={ctaMessage} url={ctaUrl} icon={ctaUrl && ctaIcon} />
 
       {/* <!-- Cards --> */}
       <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">

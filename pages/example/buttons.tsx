@@ -4,14 +4,14 @@ import PageTitle from 'example/components/Typography/PageTitle'
 import SectionTitle from 'example/components/Typography/SectionTitle'
 import CTA from 'example/components/CTA'
 import Layout from 'example/containers/Layout'
-import { HeartIcon, EditIcon } from 'icons'
+import { HeartIcon, EditIcon, StarIcon } from 'icons'
 
 function Buttons() {
   return (
     <Layout>
       <PageTitle>Buttons</PageTitle>
 
-      <CTA />
+      <CTA icon={StarIcon} message='Star this project on GitHub' url='https://github.com/roketid/windmill-nextjs-laravel-breeze' />
 
       <SectionTitle>Primary</SectionTitle>
       <div className="flex flex-col flex-wrap mb-8 space-y-4 md:flex-row md:items-end md:space-x-4">

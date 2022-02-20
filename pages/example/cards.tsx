@@ -7,14 +7,14 @@ import CTA from 'example/components/CTA'
 import InfoCard from 'example/components/Cards/InfoCard'
 import RoundIcon from 'example/components/RoundIcon'
 import Layout from 'example/containers/Layout'
-import { CartIcon, ChatIcon, MoneyIcon, PeopleIcon } from 'icons'
+import { CartIcon, ChatIcon, MoneyIcon, PeopleIcon, StarIcon } from 'icons'
 
 function Cards() {
   return (
     <Layout>
       <PageTitle>Cards</PageTitle>
 
-      <CTA />
+      <CTA icon={StarIcon} message='Star this project on GitHub' url='https://github.com/roketid/windmill-nextjs-laravel-breeze' />
 
       <SectionTitle>Big section cards</SectionTitle>
 
