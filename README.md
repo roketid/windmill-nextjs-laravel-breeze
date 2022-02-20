@@ -22,9 +22,90 @@ composer require laravel/breeze
 php artisan breeze:install api
 ```
 
-Next, ensure that your application's `APP_URL` and `FRONTEND_URL` environment variables are set to `http://localhost:8000` and `http://localhost:3000`, respectively.
+Next,
+- Ensure that your application's `APP_URL` and `FRONTEND_URL` environment variables are set to `http://localhost:8000` and `http://localhost:3000/example`, respectively.
 
-After defining the appropriate environment variables, you may serve the Laravel application using the `serve` Artisan command:
+- In `app/Providers/RouteServiceProvider.php`, update : `public const HOME = '/';`
+
+- In `app/Http/Middleware/Authenticate.php`, update :
+```php
+protected function redirectTo($request)
+{
+    if (! $request->expectsJson()) {
+        return config('app.frontend_url').'/login?next_to='.urlencode($request->url());
+    }
+}
+``` 
+
+- In `app/Http/Middleware/RedirectIfAuthenticated.php`, update :
+```php
+public function handle(Request $request, Closure $next, ...$guards)
+{
+    $guards = empty($guards) ? [null] : $guards;
+
+    foreach ($guards as $guard) {
+        if (Auth::guard($guard)->check()) {
+            return redirect(config('app.frontend_url').RouteServiceProvider::HOME);
+        }
+    }
+
+    return $next($request);
+}
+```
+
+- In `config/cors.php`, update :
+```php
+<?php
+
+$frontedUrl = env('FRONTEND_URL', '*');
+
+if ($frontedUrl !== '*') {
+    $parsed = parse_url($frontedUrl);
+    $frontedUrl = sprintf(
+        '%s://%s%s',
+        $parsed['scheme'],
+        $parsed['host'],
+        isset($parsed['port']) ? ':' . $parsed['port'] : ''
+    );
+}
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cross-Origin Resource Sharing (CORS) Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure your settings for cross-origin resource sharing
+    | or "CORS". This determines what cross-origin operations may execute
+    | in web browsers. You are free to adjust these settings as needed.
+    |
+    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    |
+    */
+
+    'paths' => ['*'],
+
+    'allowed_methods' => ['*'],
+
+    'allowed_origins' => [$frontedUrl],
+
+    'allowed_origins_patterns' => [],
+
+    'allowed_headers' => ['*'],
+
+    'exposed_headers' => [],
+
+    'max_age' => 0,
+
+    'supports_credentials' => true,
+
+];
+
+```
+
+
+After defining the appropriate environment variables and update several codes above, you may serve the Laravel application using the `serve` Artisan command:
 
 ```bash
 # Serve the application...
@@ -37,9 +118,13 @@ Next, clone this repository and install its dependencies with `yarn install` or 
 NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
 
-Finally, run the application via `npm run dev`. The application will be available at `http://localhost:3000`:
+Finally, run the application via `yarn dev` or `npm run dev`. The application will be available at `http://localhost:3000`:
 
 ```
+yarn dev
+
+# or
+
 npm run dev
 ```
 
@@ -78,12 +163,8 @@ export default ExamplePage
 
 See the [Original Project by @estevanmaito](https://github.com/estevanmaito/windmill-dashboard-react/)
 
-With help from other contributors :
-- [Typescript version by @neutralboy](https://github.com/neutralboy/windmill-dashboard-react-ts)
-- [Nextjs version by @Aldhanekaa](https://github.com/Aldhanekaa/windmill-dashboard-nextjs)
+- [NextJS TailwindCSS 3 and Typescript](https://wgithub.com/roketid/indmill-dashboard-nextjs-typescript)
 
-
-🚀 [See it live](https://windmill-dashboard-nextjs-typescript.vercel.app/example)
 
 This is not a template. This is a complete application, built on top of React, with all tiny details taken care of so you just need to bring the data to feed it.
 
@@ -96,7 +177,7 @@ Accessibility is a priority in my projects and I think it should be in yours too
 - 🧩 Multiple (custom) components
 - ⚡ Code splitting
 - Tailwind CSS
-- [Windmill React UI](https://windmillui.com/react-ui)
+- [Windmill React UI Documentation](https://windmillui.com/react-ui)
 - Heroicons
 - Chart.js
 
@@ -104,7 +185,9 @@ Accessibility is a priority in my projects and I think it should be in yours too
 
 ### General components
 
-Windmill Dashboard React is built on top of [Windmill React UI](https://windmillui.com/react-ui). You will find the documentation for every small component there.
+Windmill Dashboard React is built on top of [Windmill React UI](https://github.com/roketid/windmill-react-ui). 
+
+See [Windmill React UI Documentation](https://windmillui.com/react-ui)
 
 ### Example Boilerplate
 
